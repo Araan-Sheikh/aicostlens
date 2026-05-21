@@ -1,25 +1,48 @@
-import type { ToolRow } from "@/components/audit/AuditForm";
+import type {
+  FieldError,
+  FieldErrorsImpl,
+  Merge,
+  UseFormRegister,
+  UseFormSetValue
+} from "react-hook-form";
 import { plansByTool, supportedTools } from "@/lib/audit/catalog";
+import type { AuditFormValues } from "@/lib/audit/form-schema";
 
 type ToolSpendRowProps = {
-  row: ToolRow;
-  onChange: (id: string, patch: Partial<ToolRow>) => void;
+  errors?: Merge<FieldError, FieldErrorsImpl<AuditFormValues["tools"][number]>>;
+  index: number;
+  register: UseFormRegister<AuditFormValues>;
+  setValue: UseFormSetValue<AuditFormValues>;
+  tool: AuditFormValues["tools"][number]["tool"];
 };
 
-export function ToolSpendRow({ row, onChange }: ToolSpendRowProps) {
-  const plans = plansByTool[row.tool as keyof typeof plansByTool] ?? [];
+export function ToolSpendRow({
+  errors,
+  index,
+  register,
+  setValue,
+  tool
+}: ToolSpendRowProps) {
+  const plans = plansByTool[tool] ?? [];
 
   return (
     <div className="mt-4 grid gap-4 md:grid-cols-2">
       <label className="grid gap-2 text-sm font-medium">
         Tool
         <select
-          value={row.tool}
           onChange={(event) => {
-            const tool = event.target.value as keyof typeof plansByTool;
-            onChange(row.id, { tool, plan: plansByTool[tool][0] });
+            const selectedTool = event.target.value as keyof typeof plansByTool;
+            setValue(`tools.${index}.tool`, selectedTool, {
+              shouldDirty: true,
+              shouldValidate: true
+            });
+            setValue(`tools.${index}.plan`, plansByTool[selectedTool][0], {
+              shouldDirty: true,
+              shouldValidate: true
+            });
           }}
-          className="rounded-md border bg-white px-3 py-2"
+          value={tool}
+          className="rounded-md border bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
         >
           {supportedTools.map((tool) => (
             <option key={tool} value={tool}>
@@ -27,13 +50,17 @@ export function ToolSpendRow({ row, onChange }: ToolSpendRowProps) {
             </option>
           ))}
         </select>
+        {errors?.tool?.message ? (
+          <span className="text-sm font-normal text-red-700">
+            {errors.tool.message}
+          </span>
+        ) : null}
       </label>
       <label className="grid gap-2 text-sm font-medium">
         Plan
         <select
-          value={row.plan}
-          onChange={(event) => onChange(row.id, { plan: event.target.value })}
-          className="rounded-md border bg-white px-3 py-2"
+          {...register(`tools.${index}.plan`)}
+          className="rounded-md border bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
         >
           {plans.map((plan) => (
             <option key={plan} value={plan}>
@@ -41,6 +68,11 @@ export function ToolSpendRow({ row, onChange }: ToolSpendRowProps) {
             </option>
           ))}
         </select>
+        {errors?.plan?.message ? (
+          <span className="text-sm font-normal text-red-700">
+            {errors.plan.message}
+          </span>
+        ) : null}
       </label>
       <label className="grid gap-2 text-sm font-medium">
         Monthly spend
@@ -48,20 +80,28 @@ export function ToolSpendRow({ row, onChange }: ToolSpendRowProps) {
           type="number"
           min="0"
           placeholder="240"
-          value={row.monthlySpend}
-          onChange={(event) => onChange(row.id, { monthlySpend: event.target.value })}
-          className="rounded-md border bg-white px-3 py-2"
+          {...register(`tools.${index}.monthlySpend`, { valueAsNumber: true })}
+          className="rounded-md border bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
         />
+        {errors?.monthlySpend?.message ? (
+          <span className="text-sm font-normal text-red-700">
+            {errors.monthlySpend.message}
+          </span>
+        ) : null}
       </label>
       <label className="grid gap-2 text-sm font-medium">
         Paid seats
         <input
           type="number"
           min="1"
-          value={row.seats}
-          onChange={(event) => onChange(row.id, { seats: event.target.value })}
-          className="rounded-md border bg-white px-3 py-2"
+          {...register(`tools.${index}.seats`, { valueAsNumber: true })}
+          className="rounded-md border bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
         />
+        {errors?.seats?.message ? (
+          <span className="text-sm font-normal text-red-700">
+            {errors.seats.message}
+          </span>
+        ) : null}
       </label>
     </div>
   );
