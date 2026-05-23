@@ -2,17 +2,21 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Plus, RotateCcw, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { ToolSpendRow } from "@/components/audit/ToolSpendRow";
 import { UseCaseSelector } from "@/components/audit/UseCaseSelector";
+import { runAudit } from "@/lib/audit/engine";
 import {
   auditFormSchema,
   defaultAuditFormValues,
   type AuditFormValues
 } from "@/lib/audit/form-schema";
+import type { AuditInput } from "@/lib/audit/types";
 
 const draftStorageKey = "aicostlens.auditFormDraft";
+const resultStoragePrefix = "aicostlens.auditResult";
 
 const emptyTool: AuditFormValues["tools"][number] = {
   tool: "Cursor",
@@ -22,6 +26,7 @@ const emptyTool: AuditFormValues["tools"][number] = {
 };
 
 export function AuditForm() {
+  const router = useRouter();
   const [isRestored, setIsRestored] = useState(false);
   const [draftStatus, setDraftStatus] = useState<"clean" | "saved" | "restored">(
     "clean"
@@ -96,11 +101,25 @@ export function AuditForm() {
   }
 
   function onSubmit(values: AuditFormValues) {
-    setSubmitMessage(
-      `Draft validated for ${values.tools.length} tool${
-        values.tools.length === 1 ? "" : "s"
-      }.`
+    const auditInput: AuditInput = {
+      teamSize: values.teamSize,
+      primaryUseCase: values.primaryUseCase,
+      tools: values.tools.map((tool, index) => ({
+        id:
+          typeof crypto !== "undefined" && "randomUUID" in crypto
+            ? crypto.randomUUID()
+            : `tool_${index}`,
+        ...tool
+      }))
+    };
+    const result = runAudit(auditInput);
+
+    window.localStorage.setItem(
+      `${resultStoragePrefix}.${result.id}`,
+      JSON.stringify(result)
     );
+    setSubmitMessage("Audit ready. Opening your savings report...");
+    router.push(`/audit/${result.id}`);
   }
 
   return (

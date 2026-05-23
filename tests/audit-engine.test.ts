@@ -52,6 +52,30 @@ describe("audit engine", () => {
     expect(result.totalMonthlySavings).toBe(20);
   });
 
+  it("explains listed-price overspend with the benchmark amount", () => {
+    const result = runAudit(
+      input({
+        teamSize: 10,
+        primaryUseCase: "coding",
+        tools: [
+          {
+            id: "cursor-pro",
+            tool: "Cursor",
+            plan: "Pro",
+            monthlySpend: 400,
+            seats: 10
+          }
+        ]
+      })
+    );
+
+    expect(result.toolResults[0]?.recommendedMonthlySpend).toBe(200);
+    expect(result.toolResults[0]?.reason).toContain(
+      "benchmark is $200/month for 10 seats"
+    );
+    expect(result.toolResults[0]?.reason).toContain("15% tolerance buffer");
+  });
+
   it("recommends consolidating duplicate coding assistants", () => {
     const result = runAudit(
       input({

@@ -20,3 +20,10 @@
 **What I learned:** Pricing pages change often, so every number needs a source. If a price is unclear, I should mark it for manual verification. The first interview also made the problem feel more real: a team can spend around $8000 on Claude/OpenAI while still not having a clear tracking owner.
 **Blockers / what I'm stuck on:** I still need two more real user interviews before submission.
 **Plan for tomorrow:** Wire the audit engine into the form submission flow and build the results page with savings hero, per-tool recommendations, honest low-savings state, and prominent Credex CTA for high-savings audits.
+
+## Day 4 — 2026-05-23
+**Hours worked:** 4
+**What I did:** Wired the audit form into the deterministic audit engine, stored generated audit results locally, and added the `/audit/[id]` results route. Built the results hero, per-tool recommendation cards, high-savings Credex CTA, honest low-savings state, and placeholder sections for Day 5 email capture and AI summary.
+**What I learned:** The results page is where trust is won or lost. The strongest UI pattern is to show the savings number first, then immediately explain the exact recommendation and reason for every tool.
+**Blockers / what I'm stuck on:** Results are currently stored in browser localStorage, so links are not shareable across devices yet. Day 5 needs to move audits/leads into Supabase and add email capture.
+**Plan for tomorrow:** Add Supabase storage for audits/leads, Gemini summary generation with fallback, Resend confirmation email, and honeypot abuse protection.

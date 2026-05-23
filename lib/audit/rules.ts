@@ -17,6 +17,10 @@ function roundCurrency(value: number) {
   return Math.max(0, Math.round(value * 100) / 100);
 }
 
+function formatMoney(value: number) {
+  return `$${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+}
+
 function severityForSavings(savings: number): RecommendationSeverity {
   if (savings <= 0) {
     return "optimal";
@@ -119,7 +123,13 @@ function evaluateSingleTool(input: ToolSpendInput, auditInput: AuditInput) {
       result,
       listedSpend,
       `Align ${input.tool} billing to the listed ${input.plan} price`,
-      "Current spend is more than 15% above the official plan price times paid seats."
+      `The listed ${input.plan} benchmark is ${formatMoney(
+        listedSpend
+      )}/month for ${input.seats} seat${
+        input.seats === 1 ? "" : "s"
+      }. Current spend is ${formatMoney(
+        input.monthlySpend
+      )}/month, which is above the 15% tolerance buffer used to avoid flagging tiny billing variance.`
     );
   }
 
