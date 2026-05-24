@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:schema": "psql \"$SUPABASE_DB_URL\" -f supabase/schema.sql",
+    "db:migrate": "psql \"$SUPABASE_DB_URL\" -f supabase/migrations/20260524000000_create_audits_and_leads.sql"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

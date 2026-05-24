@@ -24,3 +24,7 @@ Covers deterministic audit engine behavior:
 4. High API spend qualifies for the Credex CTA when savings exceed $500/month.
 5. Already optimized stack does not manufacture savings.
 6. Paid seats greater than team size recommend reducing seats.
+
+## tests/summary.test.ts
+
+Covers fallback AI summary behavior for high-savings, optimized, and moderate-savings audits.

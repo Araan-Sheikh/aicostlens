@@ -1,8 +1,9 @@
 "use client";
 
-import { ArrowLeft, CalendarClock, Mail, MessageSquareText } from "lucide-react";
+import { ArrowLeft, CalendarClock, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { LeadCaptureForm } from "@/components/audit/LeadCaptureForm";
 import { ResultsHero } from "@/components/audit/ResultsHero";
 import { ToolResultCard } from "@/components/audit/ToolResultCard";
 import type { AuditResult } from "@/lib/audit/types";
@@ -16,6 +17,17 @@ type AuditResultsClientProps = {
 export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
   const [result, setResult] = useState<AuditResult | null>(null);
   const [isMissing, setIsMissing] = useState(false);
+
+  function focusLeadCapture() {
+    const leadCapture = document.getElementById("lead-capture");
+    const emailInput = document.getElementById("lead-email");
+
+    leadCapture?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    if (emailInput instanceof HTMLInputElement) {
+      window.setTimeout(() => emailInput.focus(), 350);
+    }
+  }
 
   useEffect(() => {
     const storedResult = window.localStorage.getItem(
@@ -93,6 +105,7 @@ export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
               </div>
               <button
                 type="button"
+                onClick={focusLeadCapture}
                 className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-medium text-primary"
               >
                 <CalendarClock className="h-4 w-4" aria-hidden="true" />
@@ -135,34 +148,15 @@ export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
         </section>
 
         <section className="mt-6 grid gap-4 lg:grid-cols-2">
-          <div className="rounded-md border bg-white p-5 shadow-sm">
-            <div className="flex items-center gap-2">
-              <Mail className="h-5 w-5 text-primary" aria-hidden="true" />
-              <h2 className="text-xl font-semibold">Save this report</h2>
-            </div>
-            <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
-              <input
-                type="email"
-                disabled
-                placeholder="you@company.com"
-                className="rounded-md border bg-background px-3 py-2 text-sm"
-              />
-              <button
-                type="button"
-                disabled
-                className="rounded-md border px-4 py-2 text-sm font-medium text-muted-foreground"
-              >
-                Save report
-              </button>
-            </div>
-          </div>
+          <LeadCaptureForm result={result} />
           <div className="rounded-md border bg-white p-5 shadow-sm">
             <div className="flex items-center gap-2">
               <MessageSquareText className="h-5 w-5 text-primary" aria-hidden="true" />
               <h2 className="text-xl font-semibold">Summary</h2>
             </div>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              AI-generated summary of the audit results.
+              {result.summary ||
+                "Summary generation is unavailable for this locally generated report. The deterministic verdict above remains the source of truth."}
             </p>
           </div>
         </section>

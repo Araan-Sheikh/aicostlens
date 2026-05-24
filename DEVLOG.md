@@ -27,3 +27,10 @@
 **What I learned:** The results page is where trust is won or lost. The strongest UI pattern is to show the savings number first, then immediately explain the exact recommendation and reason for every tool.
 **Blockers / what I'm stuck on:** Results are currently stored in browser localStorage, so links are not shareable across devices yet. Day 5 needs to move audits/leads into Supabase and add email capture.
 **Plan for tomorrow:** Add Supabase storage for audits/leads, Gemini summary generation with fallback, Resend confirmation email, and honeypot abuse protection.
+
+## Day 5 — 2026-05-24
+**Hours worked:** 5
+**What I did:** Added API routes for audits, leads, Gemini summary generation, and transactional email. Added Supabase admin and Resend helpers, SQL schema for audits/leads, honeypot protection on the lead form, a working post-value email capture form, Gemini summary fallback logic, `PROMPTS.md`, and fallback summary tests.
+**What I learned:** The backend needs to degrade gracefully during development. The app should still produce a useful audit and summary if Gemini, Supabase, or Resend environment variables are missing, while making it clear what will only work in production.
+**Blockers / what I'm stuck on:** Public `/report/[slug]` pages are still Day 6 work, so the email share URL points to the future public route. Supabase/Resend need real project credentials before production verification.
+**Plan for tomorrow:** Add public report pages backed by Supabase, strip private lead details, add Open Graph/Twitter metadata, copy-link behavior, and mobile/accessibility polish.

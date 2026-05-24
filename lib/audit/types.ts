@@ -41,4 +41,6 @@ export interface AuditResult {
   totalAnnualSavings: number;
   credexQualified: boolean;
   overallVerdict: string;
+  summary?: string;
+  publicSlug?: string;
 }

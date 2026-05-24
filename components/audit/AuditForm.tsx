@@ -100,7 +100,7 @@ export function AuditForm() {
     setSubmitMessage(null);
   }
 
-  function onSubmit(values: AuditFormValues) {
+  async function onSubmit(values: AuditFormValues) {
     const auditInput: AuditInput = {
       teamSize: values.teamSize,
       primaryUseCase: values.primaryUseCase,
@@ -112,14 +112,42 @@ export function AuditForm() {
         ...tool
       }))
     };
-    const result = runAudit(auditInput);
 
-    window.localStorage.setItem(
-      `${resultStoragePrefix}.${result.id}`,
-      JSON.stringify(result)
-    );
+    setSubmitMessage("Running audit...");
+
+    try {
+      const response = await fetch("/api/audits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ input: values })
+      });
+
+      if (!response.ok) {
+        throw new Error("Audit API failed");
+      }
+
+      const body = (await response.json()) as {
+        result: ReturnType<typeof runAudit>;
+      };
+
+      window.localStorage.setItem(
+        `${resultStoragePrefix}.${body.result.id}`,
+        JSON.stringify(body.result)
+      );
+      setSubmitMessage("Audit ready. Opening your savings report...");
+      router.push(`/audit/${body.result.id}`);
+    } catch {
+      const result = runAudit(auditInput);
+
+      window.localStorage.setItem(
+        `${resultStoragePrefix}.${result.id}`,
+        JSON.stringify(result)
+      );
     setSubmitMessage("Audit ready. Opening your savings report...");
-    router.push(`/audit/${result.id}`);
+      router.push(`/audit/${result.id}`);
+    }
   }
 
   return (
