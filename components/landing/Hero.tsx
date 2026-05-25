@@ -2,6 +2,19 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 const tools = ["Cursor", "Claude", "ChatGPT", "Copilot", "Gemini", "Windsurf"];
 
+const proof = [
+  {
+    quote:
+      "Found $1,240/month in duplicate AI tooling across our engineering team.",
+    person: "Mocked feedback, seed-stage CTO"
+  },
+  {
+    quote:
+      "The useful part was not just the savings number. It explained which tools overlapped.",
+    person: "Mocked feedback, startup engineering lead"
+  }
+];
+
 export function Hero() {
   return (
     <section className="border-b bg-white">
@@ -34,6 +47,18 @@ export function Hero() {
               >
                 {tool}
               </div>
+            ))}
+          </div>
+          <div className="mt-3 grid gap-3">
+            {proof.map((item) => (
+              <figure key={item.quote} className="rounded-md border bg-background p-4">
+                <blockquote className="text-sm leading-6 text-foreground">
+                  &ldquo;{item.quote}&rdquo;
+                </blockquote>
+                <figcaption className="mt-2 text-xs font-medium uppercase text-muted-foreground">
+                  {item.person}
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>

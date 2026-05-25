@@ -1,12 +1,26 @@
 # AICostLens
 
-AICostLens is a free AI spend audit tool for startup founders, CTOs, and engineering managers who want to find waste across Cursor, Claude, ChatGPT, Copilot, Gemini, Windsurf, and AI API usage. It will calculate plan-fit recommendations, estimate monthly and annual savings, and create shareable reports without requiring login.
+AICostLens is a free AI spend audit tool for startup founders, CTOs, and engineering managers who want to find hidden waste across Cursor, Claude, ChatGPT, Copilot, Gemini, Windsurf, and AI API usage. It calculates deterministic plan-fit recommendations, estimates monthly and annual savings, captures leads only after showing value, and creates privacy-safe public reports.
 
-Live: TODO
+Live: https://aicostlens.shop/
 
 ## Screenshots
 
-TODO
+### Landing Page And Audit Form
+
+![Landing page and audit form](public/demo/landing.png)
+
+### Audit Results
+
+![Audit results savings hero and recommendations](public/demo/audit-1.png)
+
+### Lead Capture And Sharing
+
+![Audit results lead capture and sharing](public/demo/audit-2.png)
+
+### Public Report
+
+![Privacy-safe public report](public/demo/report.png)
 
 ## Quick Start
 
@@ -15,14 +29,62 @@ npm install
 npm run dev
 ```
 
+Open `http://localhost:3000`.
+
 ## Environment Variables
 
-Copy `.env.example` to `.env.local` and fill in the values for Supabase, Gemini, and Resend before testing backend features.
+Copy `.env.example` to `.env.local`.
+
+```env
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+GEMINI_API_KEY=
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
+```
+
+## Database
+
+Create the Supabase tables by running the SQL in:
+
+```txt
+supabase/migrations/20260524000000_create_audits_and_leads.sql
+```
+
+Or, if `SUPABASE_DB_URL` is available in your shell:
+
+```bash
+npm run db:migrate
+```
+
+## Scripts
+
+```bash
+npm run lint
+npm run test
+npm run build
+```
+
+## Deploy
+
+Deploy on Vercel or an equivalent Next.js host.
+
+1. Add the environment variables in the hosting dashboard.
+2. Run the Supabase migration.
+3. Set `NEXT_PUBLIC_APP_URL` to the deployed URL.
+4. Confirm `/`, `/audit/[id]`, `/report/[slug]`, and API routes work.
+5. Verify GitHub Actions CI is green on the latest commit.
 
 ## Decisions
 
-1. Chose Next.js App Router because shareable report pages need dynamic metadata and API routes.
-2. Chose TypeScript because audit rules and pricing data should be explicit and testable.
-3. Started with a deterministic audit form shell before backend work so the product flow is visible early.
-4. Planned Supabase for persistence because it keeps the backend simple while still being real storage.
-5. Planned email capture after results because the assignment requires showing value before asking for contact details.
+1. **Next.js App Router:** chosen for API routes, dynamic metadata, public report pages, and simple Vercel deployment.
+2. **Deterministic audit engine:** savings are calculated by hardcoded rules and sourced pricing data, not by an LLM.
+3. **Gemini for summary:** the PDF prefers Anthropic but allows any LLM; Gemini was selected because it has a practical free API path. A templated fallback is always available.
+4. **Email after value:** users see the audit before lead capture, which matches the assignment and builds trust.
+5. **Supabase + Resend:** fast real backend and transactional email without building custom infrastructure.
+
+## Privacy
+
+Public reports show tools, spend totals, savings, recommendations, and summary text. They do not show email, company name, role, or private lead details.

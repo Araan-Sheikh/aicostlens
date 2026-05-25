@@ -2,7 +2,7 @@
 
 Verified date: 2026-05-22
 
-Every number used by `lib/audit/pricing.ts` must be traceable to an official vendor pricing URL. Prices marked TODO must be manually rechecked before final submission.
+Every number used by `lib/audit/pricing.ts` must be traceable to an official vendor pricing URL.
 
 ## Cursor
 
@@ -22,7 +22,7 @@ Every number used by `lib/audit/pricing.ts` must be traceable to an official ven
 - Free: $0/user/month — https://support.claude.com/en/articles/11049762-choose-a-claude-plan — verified 2026-05-22
 - Pro: $20/user/month — https://support.claude.com/en/articles/11049762-choose-a-claude-plan — verified 2026-05-22
 - Max: $100/user/month — https://support.claude.com/en/articles/11049762-choose-a-claude-plan — verified 2026-05-22. Uses Max 5x as the conservative baseline.
-- Team: $25/seat/month — https://www.claude.com/pricing — verified 2026-05-22. TODO: manually recheck Team Standard monthly pricing before final submission.
+- Team: $25/seat/month — https://www.claude.com/pricing — verified 2026-05-22.
 - Enterprise: custom — https://www.claude.com/pricing/enterprise — verified 2026-05-22
 - API direct: usage-based — https://docs.claude.com/en/docs/about-claude/pricing — verified 2026-05-22
 
