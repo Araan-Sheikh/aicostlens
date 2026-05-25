@@ -90,14 +90,15 @@ export async function sendAuditEmail(input: SendAuditEmailInput) {
     ? "\n\nYour audit shows a significant savings opportunity, so Credex may reach out with options for discounted AI infrastructure credits."
     : "\n\nYour stack looks reasonably optimized. We will notify you when new optimization opportunities apply.";
 
-  await resend.emails.send({
-    from,
-    to: input.email,
-    subject: input.credexQualified
-      ? `Your AI audit found ${money(input.totalMonthlySavings)}/mo in potential savings`
-      : "Your AI Spend Audit report is ready",
-    html: buildAuditEmailHtml(input),
-    text: `Hi,
+  try {
+    await resend.emails.send({
+      from,
+      to: input.email,
+      subject: input.credexQualified
+        ? `Your AI audit found ${money(input.totalMonthlySavings)}/mo in potential savings`
+        : "Your AI Spend Audit report is ready",
+      html: buildAuditEmailHtml(input),
+      text: `Hi,
 
 Your AI Spend Audit is ready.
 
@@ -108,7 +109,13 @@ You can view your public report here:
 ${input.shareUrl}${highSavingsNote}
 
 AICostLens / Credex`
-  });
+    });
+  } catch (error) {
+    return {
+      sent: false,
+      reason: error instanceof Error ? error.message : "resend_send_failed"
+    };
+  }
 
   return {
     sent: true

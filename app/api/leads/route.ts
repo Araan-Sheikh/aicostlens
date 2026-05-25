@@ -35,6 +35,7 @@ export async function POST(request: Request) {
   }
 
   let stored = false;
+  let storageError: string | null = null;
   const supabase = getSupabaseAdmin();
 
   if (supabase) {
@@ -50,6 +51,9 @@ export async function POST(request: Request) {
     });
 
     stored = !error;
+    storageError = error?.message || null;
+  } else {
+    storageError = "Supabase is not configured";
   }
 
   const emailResult = await sendAuditEmail({
@@ -63,6 +67,8 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ok: true,
     stored,
-    emailSent: emailResult.sent
+    emailSent: emailResult.sent,
+    storageError,
+    emailError: emailResult.reason || null
   });
 }

@@ -3,8 +3,11 @@
 import { ArrowLeft, CalendarClock, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { BenchmarkStrip } from "@/components/audit/BenchmarkStrip";
 import { LeadCaptureForm } from "@/components/audit/LeadCaptureForm";
+import { MethodologyCard } from "@/components/audit/MethodologyCard";
 import { ResultsHero } from "@/components/audit/ResultsHero";
+import { ShareReportCard } from "@/components/audit/ShareReportCard";
 import { ToolResultCard } from "@/components/audit/ToolResultCard";
 import type { AuditResult } from "@/lib/audit/types";
 
@@ -89,6 +92,7 @@ export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
         </Link>
 
         <ResultsHero result={result} />
+        <BenchmarkStrip result={result} />
 
         {result.credexQualified ? (
           <section className="mt-5 rounded-md border bg-primary p-5 text-primary-foreground shadow-sm">
@@ -123,6 +127,10 @@ export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
             </p>
           </section>
         )}
+
+        <div className="mt-5">
+          <ShareReportCard publicSlug={result.publicSlug} />
+        </div>
 
         <section className="mt-6">
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -160,6 +168,10 @@ export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
             </p>
           </div>
         </section>
+
+        <div className="mt-6">
+          <MethodologyCard />
+        </div>
       </div>
     </main>
   );

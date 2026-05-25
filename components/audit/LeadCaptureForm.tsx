@@ -30,9 +30,11 @@ export function LeadCaptureForm({ result }: LeadCaptureFormProps) {
       totalAnnualSavings: result.totalAnnualSavings,
       credexQualified: result.credexQualified,
       shareUrl:
-        typeof window !== "undefined"
-          ? `${window.location.origin}/report/${result.publicSlug || result.id}`
-          : "",
+        typeof window !== "undefined" && result.publicSlug
+          ? `${window.location.origin}/report/${result.publicSlug}`
+          : typeof window !== "undefined"
+            ? window.location.href
+            : "",
       website: formData.get("website")?.toString() || ""
     };
 
@@ -52,13 +54,31 @@ export function LeadCaptureForm({ result }: LeadCaptureFormProps) {
       const body = (await response.json()) as {
         stored?: boolean;
         emailSent?: boolean;
+        storageError?: string | null;
+        emailError?: string | null;
       };
       setStatus("success");
-      setMessage(
-        body.stored
-          ? "Report saved. Check your email for the confirmation link."
-          : "Report captured locally. Configure Supabase and Resend env vars for production storage and email."
-      );
+      if (body.stored && body.emailSent) {
+        setMessage("Report saved. Check your email for the confirmation link.");
+      } else if (body.stored) {
+        setMessage(
+          `Report saved. Email was not sent yet${
+            body.emailError ? `: ${body.emailError}` : "."
+          }`
+        );
+      } else if (body.emailSent) {
+        setMessage(
+          `Email sent, but database storage failed${
+            body.storageError ? `: ${body.storageError}` : "."
+          }`
+        );
+      } else {
+        setMessage(
+          `Could not store or email this report${
+            body.storageError ? `: ${body.storageError}` : "."
+          }`
+        );
+      }
     } catch {
       setStatus("error");
       setMessage("Could not save the report yet. Please try again.");

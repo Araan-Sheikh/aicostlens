@@ -41,17 +41,22 @@ export async function POST(request: Request) {
   };
   const result = runAudit(auditInput);
   const summaryResult = await generateAuditSummary(result);
-  const publicSlug = createPublicSlug();
-  const resultWithSummary = {
+  let publicSlug: string | undefined;
+  let resultWithSummary = {
     ...result,
-    summary: summaryResult.summary,
-    publicSlug
+    summary: summaryResult.summary
   };
 
   let stored = false;
   const supabase = getSupabaseAdmin();
 
   if (supabase) {
+    publicSlug = createPublicSlug();
+    resultWithSummary = {
+      ...resultWithSummary,
+      publicSlug
+    };
+
     const { error } = await supabase.from("audits").insert({
       id: result.id,
       input: auditInput,
@@ -61,6 +66,14 @@ export async function POST(request: Request) {
     });
 
     stored = !error;
+
+    if (!stored) {
+      publicSlug = undefined;
+      resultWithSummary = {
+        ...result,
+        summary: summaryResult.summary
+      };
+    }
   }
 
   return NextResponse.json({
