@@ -18,9 +18,17 @@ Live: https://aicostlens.shop/
 
 ![Audit results lead capture and sharing](public/demo/audit-2.png)
 
+### Transactional Email
+
+![Report confirmation email](public/demo/email.png)
+
 ### Public Report
 
 ![Privacy-safe public report](public/demo/report.png)
+
+### PDF Report Export
+
+![Generated PDF report](public/demo/report-pdf.png)
 
 ## Quick Start
 
