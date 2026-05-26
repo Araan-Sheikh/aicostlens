@@ -6,9 +6,10 @@ import type { AuditResult } from "@/lib/audit/types";
 
 type LeadCaptureFormProps = {
   result: AuditResult;
+  onSaved?: () => void;
 };
 
-export function LeadCaptureForm({ result }: LeadCaptureFormProps) {
+export function LeadCaptureForm({ result, onSaved }: LeadCaptureFormProps) {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
     "idle"
   );
@@ -58,6 +59,7 @@ export function LeadCaptureForm({ result }: LeadCaptureFormProps) {
         emailError?: string | null;
       };
       setStatus("success");
+      onSaved?.();
       if (body.stored && body.emailSent) {
         setMessage("Report saved. Check your email for the confirmation link.");
       } else if (body.stored) {

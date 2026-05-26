@@ -93,12 +93,12 @@ Deploy on Vercel or an equivalent Next.js host.
 1. **Next.js App Router:** chosen for API routes, dynamic metadata, public report pages, and simple Vercel deployment.
 2. **Deterministic audit engine:** savings are calculated by hardcoded rules and sourced pricing data, not by an LLM. Tool recommendations include confidence, numeric evidence, and assumptions so the logic is easier to audit.
 3. **Gemini for summary:** the PDF prefers Anthropic but allows any LLM; Gemini was selected because it has a practical free API path. A templated fallback is always available.
-4. **Email after value:** users see the audit before lead capture, which matches the assignment and builds trust.
+4. **Email after value:** users see the audit before lead capture; saving by email unlocks share and PDF actions.
 5. **Supabase + Resend:** fast real backend and transactional email without building custom infrastructure.
 
 ## Bonus Features
 
-- Server-generated PDF export for stored public reports, plus print fallback for local-only reports.
+- Server-generated PDF export for saved reports, plus print fallback for local-only reports.
 - Benchmark strip showing current spend per person, potential savings per person, tool count, and paid seats.
 - Launch blog post and X/Twitter thread draft in `LAUNCH_POST.md`.
 

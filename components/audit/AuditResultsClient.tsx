@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { BenchmarkStrip } from "@/components/audit/BenchmarkStrip";
 import { ExportPdfButton } from "@/components/audit/ExportPdfButton";
 import { LeadCaptureForm } from "@/components/audit/LeadCaptureForm";
+import { LockedReportActions } from "@/components/audit/LockedReportActions";
 import { MethodologyCard } from "@/components/audit/MethodologyCard";
 import { ResultsHero } from "@/components/audit/ResultsHero";
 import { ShareReportCard } from "@/components/audit/ShareReportCard";
@@ -21,6 +22,7 @@ type AuditResultsClientProps = {
 export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
   const [result, setResult] = useState<AuditResult | null>(null);
   const [isMissing, setIsMissing] = useState(false);
+  const [isReportSaved, setIsReportSaved] = useState(false);
 
   function focusLeadCapture() {
     const leadCapture = document.getElementById("lead-capture");
@@ -92,9 +94,11 @@ export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Back to audit form
           </Link>
-          <ExportPdfButton
-            href={result.publicSlug ? `/report/${result.publicSlug}/pdf` : undefined}
-          />
+          {isReportSaved ? (
+            <ExportPdfButton
+              href={result.publicSlug ? `/report/${result.publicSlug}/pdf` : undefined}
+            />
+          ) : null}
         </div>
 
         <ResultsHero result={result} />
@@ -134,10 +138,6 @@ export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
           </section>
         )}
 
-        <div className="mt-5">
-          <ShareReportCard publicSlug={result.publicSlug} />
-        </div>
-
         <section className="mt-6">
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -162,7 +162,7 @@ export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
         </section>
 
         <section className="mt-6 grid gap-4 lg:grid-cols-2">
-          <LeadCaptureForm result={result} />
+          <LeadCaptureForm result={result} onSaved={() => setIsReportSaved(true)} />
           <div className="rounded-md border bg-white p-5 shadow-sm">
             <div className="flex items-center gap-2">
               <MessageSquareText className="h-5 w-5 text-primary" aria-hidden="true" />
@@ -174,6 +174,14 @@ export function AuditResultsClient({ auditId }: AuditResultsClientProps) {
             </p>
           </div>
         </section>
+
+        <div className="mt-6">
+          {isReportSaved ? (
+            <ShareReportCard publicSlug={result.publicSlug} />
+          ) : (
+            <LockedReportActions />
+          )}
+        </div>
 
         <div className="mt-6">
           <MethodologyCard />
