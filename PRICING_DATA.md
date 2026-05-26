@@ -1,6 +1,6 @@
 # Pricing Data
 
-Verified date: 2026-05-22
+Verified date: 2026-05-26
 
 Every number used by `lib/audit/pricing.ts` must be traceable to an official vendor pricing URL.
 
@@ -23,7 +23,7 @@ Every number used by `lib/audit/pricing.ts` must be traceable to an official ven
 - Pro: $20/user/month — https://support.claude.com/en/articles/11049762-choose-a-claude-plan — verified 2026-05-22
 - Max: $100/user/month — https://support.claude.com/en/articles/11049762-choose-a-claude-plan — verified 2026-05-22. Uses Max 5x as the conservative baseline.
 - Team: $25/seat/month — https://www.claude.com/pricing — verified 2026-05-22.
-- Enterprise: custom — https://www.claude.com/pricing/enterprise — verified 2026-05-22
+- Enterprise: variable/custom — https://www.claude.com/pricing — verified 2026-05-26. Claude lists Enterprise self-serve as $20/seat plus API-rate usage; sales-assisted Enterprise remains quote-based, so the engine treats Enterprise as variable/custom rather than pretending there is one fixed monthly benchmark.
 - API direct: usage-based — https://docs.claude.com/en/docs/about-claude/pricing — verified 2026-05-22
 
 ## ChatGPT
