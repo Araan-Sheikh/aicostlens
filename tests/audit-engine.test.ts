@@ -74,6 +74,11 @@ describe("audit engine", () => {
       "benchmark is $200/month for 10 seats"
     );
     expect(result.toolResults[0]?.reason).toContain("15% tolerance buffer");
+    expect(result.toolResults[0]?.confidence).toBe("high");
+    expect(result.toolResults[0]?.evidence).toContainEqual({
+      label: "Official listed benchmark",
+      value: "$200"
+    });
   });
 
   it("recommends consolidating duplicate coding assistants", () => {
@@ -166,6 +171,9 @@ describe("audit engine", () => {
 
     expect(result.toolResults[0]?.recommendedAction).toContain("Reduce Claude seats");
     expect(result.toolResults[0]?.recommendedMonthlySpend).toBe(75);
+    expect(result.toolResults[0]?.assumptions).toContain(
+      "Assumes paid seats above team size are removable or inactive."
+    );
     expect(result.totalMonthlySavings).toBe(50);
   });
 });

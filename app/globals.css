@@ -45,3 +45,38 @@ input,
 select {
   font: inherit;
 }
+
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  body {
+    background: white;
+    color: hsl(var(--foreground));
+  }
+
+  footer,
+  button,
+  input,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  main,
+  section,
+  article {
+    background: white !important;
+    box-shadow: none !important;
+  }
+
+  article,
+  section {
+    break-inside: avoid;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

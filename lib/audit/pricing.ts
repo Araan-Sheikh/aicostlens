@@ -12,7 +12,7 @@ export interface PlanPrice {
 
 export type PricingTable = Record<ToolName, Record<string, PlanPrice>>;
 
-export const PRICING_VERIFIED_AT = "2026-05-21";
+export const PRICING_VERIFIED_AT = "2026-05-26";
 
 export const pricing: PricingTable = {
   Cursor: {
@@ -93,7 +93,9 @@ export const pricing: PricingTable = {
       monthlyUsd: null,
       unit: "custom",
       sourceUrl: "https://www.claude.com/pricing/enterprise",
-      verifiedAt: PRICING_VERIFIED_AT
+      verifiedAt: PRICING_VERIFIED_AT,
+      notes:
+        "Claude lists Enterprise self-serve as $20/seat plus API-rate usage; sales-assisted enterprise remains quote-based, so the engine treats it as variable/custom."
     },
     "API direct": {
       monthlyUsd: null,

@@ -17,6 +17,12 @@ export interface AuditInput {
 }
 
 export type RecommendationSeverity = "optimal" | "minor" | "medium" | "high";
+export type RecommendationConfidence = "high" | "medium" | "low";
+
+export interface RecommendationEvidence {
+  label: string;
+  value: string;
+}
 
 export interface ToolAuditResult {
   tool: ToolName;
@@ -28,6 +34,9 @@ export interface ToolAuditResult {
   annualSavings: number;
   reason: string;
   severity: RecommendationSeverity;
+  confidence: RecommendationConfidence;
+  evidence: RecommendationEvidence[];
+  assumptions: string[];
 }
 
 export interface AuditResult {

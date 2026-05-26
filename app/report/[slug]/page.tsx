@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, MessageSquareText } from "lucide-react";
 import { BenchmarkStrip } from "@/components/audit/BenchmarkStrip";
+import { ExportPdfButton } from "@/components/audit/ExportPdfButton";
 import { MethodologyCard } from "@/components/audit/MethodologyCard";
 import { ResultsHero } from "@/components/audit/ResultsHero";
 import { ShareReportCard } from "@/components/audit/ShareReportCard";
@@ -73,13 +74,16 @@ export default async function ReportPage({ params }: ReportPageProps) {
   return (
     <main className="min-h-screen bg-background">
       <div className="mx-auto max-w-6xl px-4 py-8 lg:px-8">
-        <Link
-          href="/"
-          className="mb-5 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Run your own audit
-        </Link>
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between print:hidden">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            Run your own audit
+          </Link>
+          <ExportPdfButton href={`/report/${slug}/pdf`} />
+        </div>
 
         <ResultsHero result={report} />
         <BenchmarkStrip result={report} />

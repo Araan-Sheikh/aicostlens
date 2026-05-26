@@ -19,6 +19,11 @@ export function MethodologyCard() {
           this submission. If a vendor price is unclear, custom, or usage-based,
           the engine avoids pretending it has exact savings.
         </p>
+        <p>
+          Each recommendation includes a confidence label, the numeric evidence
+          behind the suggested spend, and assumptions such as self-reported usage,
+          removable seats, or credit eligibility.
+        </p>
       </div>
     </section>
   );
